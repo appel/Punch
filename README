@@ -1,16 +1,20 @@
+# punch
+
 Update coming soon!
 
 Punch is a server-based timer. A digital punch clock, if you will. It's PHP/mySQL backend ensure you never lose your timings in case of a crash or accidental closing of your browser.
 
 This script is by no means perfect and not even close to elegant. I like to put in the "Hey, it works!" category.
 
-== FEATURES ==
+## FEATURES
+
 * It works.
 * Pause/continue.
 * Time notation: start time / stop time / elapsed time / decimal time.
 * As it's server based, the browser window doesn't need to be open for the timer to run.
 
-== INSTALLATION ==
+## INSTALLATION
+
 1. Fire up phpMyAdmin (or whatever client you use), create/enter a database and create the following table in it:
 
 	CREATE TABLE IF NOT EXISTS `prikklok` (
