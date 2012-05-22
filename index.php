@@ -1,95 +1,96 @@
 <?php
 
-	/**
-	 * Punch
-	 * by alsjeblaft.nl
-	 */
+/**
+ * Punch
+ * by alsjeblaft.nl
+ 
+ */
 
-	error_reporting(0);
+error_reporting(0);
 
-	$db_host	= 'localhost';
-	$db_user	= '';
-	$db_pass	= '';
-	$db_name	= '';
-	$table		= 'punch';
+$db_host	= 'localhost';
+$db_user	= '';
+$db_pass	= '';
+$db_name	= '';
+$table		= 'punch';
 
-	$connection = mysql_connect($db_host, $db_user , $db_pass);
+$connection = mysql_connect($db_host, $db_user , $db_pass);
 
-	if(!$connection) die("Can't connect to database. Check username and password.");
+if(!$connection) die("Can't connect to database. Check username and password.");
 
-	$selection = mysql_select_db($db_name, $connection);
-	if(!$selection) die("Can't select database '".$db_name."'. Typo?");
+$selection = mysql_select_db($db_name, $connection);
+if(!$selection) die("Can't select database '".$db_name."'. Typo?");
 
 
-	$current = $_GET['c'];
+$current = $_GET['c'];
 
-	$sql = "SELECT *, UNIX_TIMESTAMP(punch_in) as punch_in_ts FROM `".$table."` WHERE `desc` IS NOT NULL ORDER BY `desc` ASC";
-	$query = mysql_query($sql);
+$sql = "SELECT *, UNIX_TIMESTAMP(punch_in) as punch_in_ts FROM `".$table."` WHERE `desc` IS NOT NULL ORDER BY `desc` ASC";
+$query = mysql_query($sql);
 
-	while ($row = mysql_fetch_assoc($query))
-	{
-		$clocks[$row['id']] = $row;
-	}
+while ($row = mysql_fetch_assoc($query))
+{
+	$clocks[$row['id']] = $row;
+}
 
-	if(!is_numeric($current))
-	{
-		$first = key($clocks);
-		header("Location: index.php?c=".$first);
-	}
+if(!is_numeric($current))
+{
+	$first = key($clocks);
+	header("Location: index.php?c=".$first);
+}
 
-	$c = $clocks[$current];
+$c = $clocks[$current];
 
-	function time_to_sec($time) { 
-		$hours = substr($time, 0, -6); 
-		$minutes = substr($time, -5, 2); 
-		$seconds = substr($time, -2); 
+function time_to_sec($time) { 
+	$hours = substr($time, 0, -6); 
+	$minutes = substr($time, -5, 2); 
+	$seconds = substr($time, -2); 
 
-		return $hours * 3600 + $minutes * 60 + $seconds; 
-	} 
+	return $hours * 3600 + $minutes * 60 + $seconds; 
+} 
 
-	function sec_to_time($seconds) { 
-		$hours = floor($seconds / 3600); 
-		$minutes = floor($seconds % 3600 / 60); 
-		$seconds = $seconds % 60; 
+function sec_to_time($seconds) { 
+	$hours = floor($seconds / 3600); 
+	$minutes = floor($seconds % 3600 / 60); 
+	$seconds = $seconds % 60; 
 
-		return sprintf("%02d:%02d:%02d", $hours, $minutes, $seconds); 
-	} 
+	return sprintf("%02d:%02d:%02d", $hours, $minutes, $seconds); 
+} 
 
-	function printable_decimal_time($elapsed)
-	{
-		return number_format(round(((float) $elapsed / 3600.0),3), 2, ',', '');
-	}
+function printable_decimal_time($elapsed)
+{
+	return number_format(round(((float) $elapsed / 3600.0),3), 2, ',', '');
+}
 
-	if(isset($_GET['action']))
-	switch($_GET['action'])
-	{
-		case "update":
-		mysql_query("UPDATE `".$table."` SET `desc` = '".$_GET['desc']."' WHERE id = ".$current.";") or die(mysql_error());
-		header("Location: index.php?c=".$current);
-		break;
+if(isset($_GET['action']))
+switch($_GET['action'])
+{
+	case "update":
+	mysql_query("UPDATE `".$table."` SET `desc` = '".$_GET['desc']."' WHERE id = ".$current.";") or die(mysql_error());
+	header("Location: index.php?c=".$current);
+	break;
 
-		case "punch":
-		mysql_query("UPDATE `".$table."` SET `desc` = '".$_GET['desc']."', `start` = NOW(), `punch_in` = NOW(), `end` = '0000-00-00 00:00:00',  `elapsed` = 0, status = 1 WHERE id = ".$current.";") or die(mysql_error());
-		header("Location: index.php?c=".$current);
-		break;
+	case "punch":
+	mysql_query("UPDATE `".$table."` SET `desc` = '".$_GET['desc']."', `start` = NOW(), `punch_in` = NOW(), `end` = '0000-00-00 00:00:00',  `elapsed` = 0, status = 1 WHERE id = ".$current.";") or die(mysql_error());
+	header("Location: index.php?c=".$current);
+	break;
 
-		case "pause":
-		$diff = (abs(strtotime(date('Y-m-d H:i:s', time())) - strtotime(date('Y-m-d H:i:s', $c['punch_in_ts']))));
+	case "pause":
+	$diff = (abs(strtotime(date('Y-m-d H:i:s', time())) - strtotime(date('Y-m-d H:i:s', $c['punch_in_ts']))));
 
-		mysql_query("UPDATE `".$table."` SET `desc` = '".$_GET['desc']."', `punch_out` = NOW(), `end` = NOW(), `elapsed` = (elapsed+".$diff."), `status` = 0 WHERE id = ".$current." LIMIT 1;") or die(mysql_error().'<br />');
-		header("Location: index.php?c=".$current);
-		break;
+	mysql_query("UPDATE `".$table."` SET `desc` = '".$_GET['desc']."', `punch_out` = NOW(), `end` = NOW(), `elapsed` = (elapsed+".$diff."), `status` = 0 WHERE id = ".$current." LIMIT 1;") or die(mysql_error().'<br />');
+	header("Location: index.php?c=".$current);
+	break;
 
-		case "continue":
-		mysql_query("UPDATE `".$table."` SET `desc` = '".$_GET['desc']."', `punch_in` = NOW(), `punch_out` = NOW(), `status` = 1 WHERE id = ".$current." LIMIT 1;") or die(mysql_error().'<br />');
-		header("Location: index.php?c=".$current);
-		break;
+	case "continue":
+	mysql_query("UPDATE `".$table."` SET `desc` = '".$_GET['desc']."', `punch_in` = NOW(), `punch_out` = NOW(), `status` = 1 WHERE id = ".$current." LIMIT 1;") or die(mysql_error().'<br />');
+	header("Location: index.php?c=".$current);
+	break;
 
-		case "reset":
-		mysql_query("UPDATE `".$table."` SET `desc` = '', `start` = '0000-00-00 00:00:00', `punch_in` = '0000-00-00 00:00:00', `punch_out` = '0000-00-00 00:00:00', `end` = '0000-00-00 00:00:00',`elapsed` = 0, `status` = 0 WHERE id = ".$current." LIMIT 1;") or die(mysql_error().'<br />');
-		header("Location: index.php?c=".$current);
-		break;
-	}
+	case "reset":
+	mysql_query("UPDATE `".$table."` SET `desc` = '', `start` = '0000-00-00 00:00:00', `punch_in` = '0000-00-00 00:00:00', `punch_out` = '0000-00-00 00:00:00', `end` = '0000-00-00 00:00:00',`elapsed` = 0, `status` = 0 WHERE id = ".$current." LIMIT 1;") or die(mysql_error().'<br />');
+	header("Location: index.php?c=".$current);
+	break;
+}
 
 
 ?><html>
