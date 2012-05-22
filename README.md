@@ -1,12 +1,12 @@
-                               __         
-                              /\ \        
- _____   __  __    ___     ___\ \ \___    
-/\ '__`\/\ \/\ \ /' _ `\  /'___\ \  _ `\  
-\ \ \L\ \ \ \_\ \/\ \/\ \/\ \__/\ \ \ \ \ 
- \ \ ,__/\ \____/\ \_\ \_\ \____\\ \_\ \_\
-  \ \ \/  \/___/  \/_/\/_/\/____/ \/_/\/_/
-   \ \_\                                  
-    \/_/                                  
+    *                                __         
+    *                               /\ \        
+    *  _____   __  __    ___     ___\ \ \___    
+    * /\ '__`\/\ \/\ \ /' _ `\  /'___\ \  _ `\  
+    * \ \ \L\ \ \ \_\ \/\ \/\ \/\ \__/\ \ \ \ \ 
+    *  \ \ ,__/\ \____/\ \_\ \_\ \____\\ \_\ \_\
+    *   \ \ \/  \/___/  \/_/\/_/\/____/ \/_/\/_/
+    *    \ \_\                                  
+    *     \/_/                                  
 
 Punch is a server-based timer. A digital punch clock, if you will. Its PHP/MySQL backend ensure you never lose your timings in case of a crash or accidental closing of your browser. I've been running it on my localhost via a Chrome application shortcut and using it for over three years to record my billable hours.
 
