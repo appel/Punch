@@ -1,13 +1,3 @@
-                                   __         
-                                  /\ \        
-     _____   __  __    ___     ___\ \ \___    
-    /\ '__`\/\ \/\ \ /' _ `\  /'___\ \  _ `\  
-    \ \ \L\ \ \ \_\ \/\ \/\ \/\ \__/\ \ \ \ \ 
-     \ \ ,__/\ \____/\ \_\ \_\ \____\\ \_\ \_\
-      \ \ \/  \/___/  \/_/\/_/\/____/ \/_/\/_/
-       \ \_\                                  
-        \/_/                                  
-
 Punch!
 ======
 		
@@ -35,5 +25,6 @@ Installation
 To do
 -----
 
-1. Add/remove tabs
+1. Add/remove tabs button.
+1. Housecleaning.
 2. Needs a little lovin' in the icon dep.
