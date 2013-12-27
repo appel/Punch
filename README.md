@@ -5,7 +5,7 @@ Punch is a server-based timer. A digital punch clock, if you will. Its PHP/MySQL
 
 ![Punch in action](http://i.imgur.com/K7o1n.jpg)
 
-This script is by no means perfect and not even close to elegant. I like to put in the "Hey, it works!" category.
+This script is by no means perfect and not even close to elegant. I like to put it in the "Hey, it works!" category.
 
 Features
 --------
